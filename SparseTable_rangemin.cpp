@@ -22,6 +22,7 @@ void buildSparseTable(){
 int rangeMinQuery(int l, int r){
     int lg = log2(r -l + 1);
     return min(sparse[lg][l], sparse[lg][r - (1 << lg) + 1]);
+    // return max(sparse[lg][l], sparse[lg][r - (1 << lg) + 1]);
 }
 int main(){
 
