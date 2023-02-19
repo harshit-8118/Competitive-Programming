@@ -20,28 +20,12 @@ void buildSparseTable(){
 }
 
 int rangeMinQuery(int l, int r){
-    int mn = INT_MAX;
-    // int mx = INT_MIN;
-    int i = sz;
-    while(i >= 0){
-        if(l + (1 << i) <= r + 1){
-            mn = min(mn, sparse[i][l]);
-            // mx = max(mn, sparse[i][l]);
-            l += (1 << i);
-        } i--;
-    }
-    return mn;
-    // return mx;
+    int lg = log2(r -l + 1);
+    return min(sparse[lg][l], sparse[lg][r - (1 << lg) + 1]);
 }
 int main(){
 
 ios_base::sync_with_stdio(false);    cin.tie(NULL);    cout.tie(NULL);
-
-// #ifndef ONLINE_JUDGE
-//    freopen("input.txt", "r", stdin);
-//    freopen("output.txt", "w", stdout);
-//    freopen("error.txt", "w", stderr);
-// #endif
 
     cin>>N;
     sz = log2(N);
@@ -50,7 +34,6 @@ ios_base::sync_with_stdio(false);    cin.tie(NULL);    cout.tie(NULL);
         cin>>x;
     }
     buildSparseTable();
-    fix(sparse);
     int q, l, r;
     cin>>q;
     while(q--){
