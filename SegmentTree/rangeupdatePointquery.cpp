@@ -54,12 +54,21 @@ segmentTree obj(n);
 arr = vector<int>(n);
 for(auto &x: arr) cin>>x;
 obj.build(1, 0, n-1);
-// fix(obj.t);
-obj.update(1, 0, n-1, 2, 4, 3);
-obj.update(1, 0, n-1, 2, 4, -3);
-obj.update(1, 0, n-1, 2, 4, 2);
-// fix(obj.t);
-cout<<obj.get_query(1, 0, n-1, 2);
+
+int q, l, r, type, val;
+while(q--){
+  cin>>type;
+  if(type == 1){ 
+    cin>>l>>r>>val; r--;
+    obj.update(1, 0, n-1, l, r, val);
+  }
+  else{
+    cin>>r;
+    int val = obj.get_query(1, 0, n-1, r);
+    cout<<val<<" ";
+  }
+}
+
 
 return 0;
 }
