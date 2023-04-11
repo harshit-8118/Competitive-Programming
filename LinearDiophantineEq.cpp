@@ -1,9 +1,11 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 #define int long long int
 
-int gcd(int a, int b, int& x, int& y) {
-    if (b == 0) {
+int LX, MX, G;
+
+int gcd(int a, int b, int &x, int &y){
+    if (b == 0){
         x = 1;
         y = 0;
         return a;
@@ -15,44 +17,34 @@ int gcd(int a, int b, int& x, int& y) {
     return d;
 }
 
-bool find_any_solution(int a, int b, int c, int &x0, int &y0, int &g) {
+bool find_any_solution(int a, int b, int c, int &x0, int &y0, int &g)
+{
     g = gcd(abs(a), abs(b), x0, y0);
-    if (c % g) {
+    if (c % g)
         return false;
-    }
 
     x0 *= c / g;
     y0 *= c / g;
-    if (a < 0) x0 = -x0;
-    if (b < 0) y0 = -y0;
+    if (a < 0)        x0 = -x0;
+    if (b < 0)        y0 = -y0;
     return true;
 }
 
-void shift_solution(int & x, int & y, int a, int b, int cnt) {
+void shift_solution(int &x, int &y, int a, int b, int cnt){
     x += cnt * b;
     y -= cnt * a;
 }
 
-int find_all_solutions(int a, int b, int c, int minx, int maxx, int miny, int maxy) {
+int find_all_solutions(int a, int b, int c, int minx, int maxx, int miny, int maxy)
+{
     int x, y, g;
     if (!find_any_solution(a, b, c, x, y, g))
         return 0;
     a /= g;
     b /= g;
-    
-    cout<<a<<" "<<b<<endl;
-    // general solution
-    cout<<x<<" "<<y<<endl;
-
-    for(int i = -5; i < 6; i++){
-        int x1 = x + i*b;
-        int y1 = y - i*a;
-        cout<<x1<<" "<<y1<<endl;
-    }
-
     int sign_a = a > 0 ? +1 : -1;
     int sign_b = b > 0 ? +1 : -1;
-
+    G = g;
     shift_solution(x, y, a, b, (minx - x) / b);
     if (x < minx)
         shift_solution(x, y, a, b, sign_b);
@@ -84,30 +76,32 @@ int find_all_solutions(int a, int b, int c, int minx, int maxx, int miny, int ma
 
     if (lx > rx)
         return 0;
-
-    // printing answers
-    int xx = lx;
-    for(int i = 0; xx <= rx ; i++){
-        int yy = (c - a * g * xx) / (b * g);
-        cout<<xx<<" "<<yy<<endl;
-        xx += b;
-    }
+    LX = lx;
+    MX = rx;
     return (rx - lx) / abs(b) + 1;
 }
 
+signed main()
+{
 
-signed main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
-#ifndef ONLINE_JUDGE
-   freopen("input.txt", "r", stdin);
-   freopen("output.txt", "w", stdout);
-#endif
+    int a, b, c, mnx, mxx, mny, mxy;
+    cin >> a >> b >> c >> mnx >> mxx >> mny >> mxy;
+    int sol = find_all_solutions(a, b, c, mnx, mxx, mny, mxy);
 
-ios_base::sync_with_stdio(false);    cin.tie(NULL);    cout.tie(NULL);
+    if (!sol)
+        return 0;
 
-int a, b, c, mnx, mxx, mny, mxy;
-cin>>a>>b>>c>>mnx>>mxx>>mny>>mxy;
-cout<<find_all_solutions(a, b, c, mnx, mxx, mny, mxy);
+    cout << "total solutions : " << sol << endl;
+    for (int i = 0; LX + i * (b / G) <= MX; i++){
+        int x = LX + i * (b / G);
+        int y = (c - a * x) / b;
+        cout << x << " " << y << endl;
+        cout << a * x + b * y << endl;
+    }
 
-return 0;
+    return 0;
 }
